@@ -7,13 +7,18 @@ export const retrieveTaskList = asyncHandler(async (req: Request, res: Response)
   console.log("retrieveTaskList", req.user);
   try {
     const pageNumber: number = Number(req.params.page);
-      // Ensure req.user is correctly set by your JWT middleware
+    // Ensure req.user is correctly set by your JWT middleware
     const userId = req.user?.id;
 
-      // Call the function to fetch the task list
-    const taskList = await retrieveUserTaskList_DB(Number(userId),Number(pageNumber));
-
-    res.status(200).json(taskList);
+    // Call the function to fetch the task list
+    const taskList = await retrieveUserTaskList_DB(Number(userId), Number(pageNumber));
+    if (taskList.length === 0) {
+      // If the taskList is empty, respond with a 404 status code and a message
+      res.status(404).json({ message: "No tasks found for this page" });
+    } else {
+      // If tasks are found, respond with a 200 status code and the taskList
+      res.status(200).json(taskList);
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error: An error occurred while creating the task" });
   }

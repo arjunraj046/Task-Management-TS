@@ -13,7 +13,7 @@ export const retrieveUserTaskList_DB = async (id: number, page: number) => {
       skip: skipCount, // Skip the appropriate number of items based on the page
       take: itemsPerPage, // Retrieve only 5 items per page
     });
-
+    
     return tasks;
   } catch (error) {
     throw error;
