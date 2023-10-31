@@ -2,14 +2,18 @@ import { FindOneOptions, getRepository } from "typeorm";
 import { TaskSchema } from "../models/task";
 
 // GET /tasks: Retrieve a list of all tasks
-export const retrieveUserTaskList_DB = async (id: number) => {
+export const retrieveUserTaskList_DB = async (id: number, page: number) => {
   const TaskRepository = getRepository(TaskSchema);
   try {
+    const itemsPerPage = 5;
+    const skipCount = (page - 1) * itemsPerPage;
+
     const tasks = await TaskRepository.find({
-      where: {
-        userId: id,
-      },
+      where: { userId: id },
+      skip: skipCount, // Skip the appropriate number of items based on the page
+      take: itemsPerPage, // Retrieve only 5 items per page
     });
+
     return tasks;
   } catch (error) {
     throw error;

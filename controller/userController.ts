@@ -6,11 +6,12 @@ import { creatNewTask_DB, deleteTaskWithID_DB, retrieveSpecificTask_DB, retrieve
 export const retrieveTaskList = asyncHandler(async (req: Request, res: Response) => {
   console.log("retrieveTaskList", req.user);
   try {
-    //   // Ensure req.user is correctly set by your JWT middleware
+    const pageNumber: number = Number(req.params.page);
+      // Ensure req.user is correctly set by your JWT middleware
     const userId = req.user?.id;
 
-    //   // Call the function to fetch the task list
-    const taskList = await retrieveUserTaskList_DB(Number(userId));
+      // Call the function to fetch the task list
+    const taskList = await retrieveUserTaskList_DB(Number(userId),Number(pageNumber));
 
     res.status(200).json(taskList);
   } catch (error) {
